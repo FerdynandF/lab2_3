@@ -29,14 +29,27 @@ public class SimilarityFinderTest {
             @Override
             public SearchResult search(int key, int[] seq) {
                 if (key == seq[0] || key == seq[1] || key == seq[2]) {
-                    builder = SearchResult.builder().withFound(true);
-                    return builder.build();
+                    return SearchResult.builder().withFound(true).build();
                 }
-                return builder.withFound(false).build();
+                return SearchResult.builder().withFound(false).build();
             }
         });
         int[] set1 = {1, 3, 5};
         int[] set2 = {1, 3, 5};
         Assert.assertThat(1.0d, is(equalTo(similarityFinder.calculateJackardSimilarity(set1, set2))));
+    }
+
+    @Test
+    public void jackardSimilarityWithNoIntersectShouldReturnZero() {
+        similarityFinder = new SimilarityFinder(new SequenceSearcher() {
+
+            @Override
+            public SearchResult search(int key, int[] seq) {
+                return SearchResult.builder().withFound(false).build();
+            }
+        });
+        int[] set1 = {1, 3, 5};
+        int[] set2 = {2, 4, 6};
+        Assert.assertThat(0d, is(equalTo(similarityFinder.calculateJackardSimilarity(set1, set2))));
     }
 }
