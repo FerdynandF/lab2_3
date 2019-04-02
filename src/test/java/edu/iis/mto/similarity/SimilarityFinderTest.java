@@ -41,13 +41,7 @@ public class SimilarityFinderTest {
 
     @Test
     public void jackardSimilarityWithNoIntersectShouldReturnZero() {
-        similarityFinder = new SimilarityFinder(new SequenceSearcher() {
-
-            @Override
-            public SearchResult search(int key, int[] seq) {
-                return SearchResult.builder().withFound(false).build();
-            }
-        });
+        similarityFinder = new SimilarityFinder((key, seq) -> SearchResult.builder().withFound(false).build());
         int[] set1 = {1, 3, 5};
         int[] set2 = {2, 4, 6};
         Assert.assertThat(0d, is(equalTo(similarityFinder.calculateJackardSimilarity(set1, set2))));
@@ -67,11 +61,36 @@ public class SimilarityFinderTest {
 
     @Test
     public void jackardSimilarityWithDifferentSetsShouldReturnZero() {
-        similarityFinder = new SimilarityFinder((key, seq) -> {
-            return SearchResult.builder().withFound(false).build();
-        });
+        similarityFinder = new SimilarityFinder((key, seq) -> SearchResult.builder().withFound(false).build());
         int[] set1 = {1, 2, 3, 8};
         int[] set2 = {4, 5, 7, 10};
         Assert.assertThat(0d, is(equalTo(similarityFinder.calculateJackardSimilarity(set1, set2))));
+    }
+
+    @Test
+    public void jackardSimilarityCountCallsOfSearchMethod() {
+        SequenceSearcherDublerForTest searcherDubler = new SequenceSearcherDublerForTest();
+
+        int[] set1 = {1, 2, 3, 4, 5, 6};
+        int[] set2 = {11, 22, 33, 44, 55, 66, 77};
+
+        similarityFinder = new SimilarityFinder(searcherDubler);
+        similarityFinder.calculateJackardSimilarity(set1, set2);
+        Assert.assertThat(set1.length, is(equalTo(searcherDubler.getCallCount())));
+    }
+
+    class SequenceSearcherDublerForTest implements edu.iis.mto.search.SequenceSearcher {
+
+        private int callCount;
+
+        @Override
+        public SearchResult search(int key, int[] seq) {
+            callCount++;
+            return SearchResult.builder().withFound(false).build();
+        }
+
+        int getCallCount() {
+            return callCount;
+        }
     }
 }
