@@ -64,4 +64,14 @@ public class SimilarityFinderTest {
         int[] set2 = {1, 2, 3, 4};
         Assert.assertThat(0.5d, is(equalTo(similarityFinder.calculateJackardSimilarity(set1, set2))));
     }
+
+    @Test
+    public void jackardSimilarityWithDifferentSetsShouldReturnZero() {
+        similarityFinder = new SimilarityFinder((key, seq) -> {
+            return SearchResult.builder().withFound(false).build();
+        });
+        int[] set1 = {1, 2, 3, 8};
+        int[] set2 = {4, 5, 7, 10};
+        Assert.assertThat(0d, is(equalTo(similarityFinder.calculateJackardSimilarity(set1, set2))));
+    }
 }
