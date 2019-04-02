@@ -52,4 +52,16 @@ public class SimilarityFinderTest {
         int[] set2 = {2, 4, 6};
         Assert.assertThat(0d, is(equalTo(similarityFinder.calculateJackardSimilarity(set1, set2))));
     }
+
+    @Test
+    public void jackardSimilarityWithIntersectShouldReturnAHalf() {
+        similarityFinder = new SimilarityFinder((key, seq) -> {
+            if (key == seq[1] || key == seq[2])
+                return SearchResult.builder().withFound(true).build();
+            return SearchResult.builder().withFound(false).build();
+        });
+        int[] set1 = {2, 3};
+        int[] set2 = {1, 2, 3, 4};
+        Assert.assertThat(0.5d, is(equalTo(similarityFinder.calculateJackardSimilarity(set1, set2))));
+    }
 }
