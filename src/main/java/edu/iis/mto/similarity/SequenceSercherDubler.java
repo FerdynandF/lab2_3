@@ -5,7 +5,7 @@ import edu.iis.mto.search.SequenceSearcher;
 
 public class SequenceSercherDubler implements SequenceSearcher {
 
-    private int callsCounter;
+    private static int callsCounter;
 
     @Override
     public SearchResult search(int key, int[] seq) {
