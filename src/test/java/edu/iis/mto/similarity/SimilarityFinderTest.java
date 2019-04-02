@@ -32,4 +32,12 @@ public class SimilarityFinderTest {
         Assert.assertThat(1.0d, is(equalTo(similarityFinder.calculateJackardSimilarity(set1, set2))));
 
     }
+
+    @Test
+    public void jackardSimilarityWithNoIntersectShouldReturnZero() {
+        int[] set1 = {1, 3, 5};
+        int[] set2 = {2, 4, 6};
+        Assert.assertThat(0d, is(equalTo(similarityFinder.calculateJackardSimilarity(set1, set2))));
+
+    }
 }
