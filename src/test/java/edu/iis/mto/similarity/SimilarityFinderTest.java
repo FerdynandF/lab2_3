@@ -18,8 +18,7 @@ public class SimilarityFinderTest {
         similarityFinder = new SimilarityFinder((key, seq) -> builder.build());
         int[] set1 = {};
         int[] set2 = {};
-        Assert.assertThat(1.0d, is(equalTo(similarityFinder.calculateJackardSimilarity(set1, set2))));
-
+        Assert.assertThat(similarityFinder.calculateJackardSimilarity(set1, set2), is(equalTo(1.0)));
     }
 
     @Test
@@ -36,7 +35,7 @@ public class SimilarityFinderTest {
         });
         int[] set1 = {1, 3, 5};
         int[] set2 = {1, 3, 5};
-        Assert.assertThat(1.0d, is(equalTo(similarityFinder.calculateJackardSimilarity(set1, set2))));
+        Assert.assertThat(similarityFinder.calculateJackardSimilarity(set1, set2), is(equalTo(1.0d)));
     }
 
     @Test
@@ -44,7 +43,7 @@ public class SimilarityFinderTest {
         similarityFinder = new SimilarityFinder((key, seq) -> SearchResult.builder().withFound(false).build());
         int[] set1 = {1, 3, 5};
         int[] set2 = {2, 4, 6};
-        Assert.assertThat(0d, is(equalTo(similarityFinder.calculateJackardSimilarity(set1, set2))));
+        Assert.assertThat(similarityFinder.calculateJackardSimilarity(set1, set2), is(equalTo(0d)));
     }
 
     @Test
@@ -56,7 +55,7 @@ public class SimilarityFinderTest {
         });
         int[] set1 = {2, 3};
         int[] set2 = {1, 2, 3, 4};
-        Assert.assertThat(0.5d, is(equalTo(similarityFinder.calculateJackardSimilarity(set1, set2))));
+        Assert.assertThat(similarityFinder.calculateJackardSimilarity(set1, set2), is(equalTo(0.5d)));
     }
 
     @Test
@@ -64,7 +63,7 @@ public class SimilarityFinderTest {
         similarityFinder = new SimilarityFinder((key, seq) -> SearchResult.builder().withFound(false).build());
         int[] set1 = {1, 2, 3, 8};
         int[] set2 = {4, 5, 7, 10};
-        Assert.assertThat(0d, is(equalTo(similarityFinder.calculateJackardSimilarity(set1, set2))));
+        Assert.assertThat(similarityFinder.calculateJackardSimilarity(set1, set2), is(equalTo(0d)));
     }
 
     @Test
@@ -76,7 +75,7 @@ public class SimilarityFinderTest {
 
         similarityFinder = new SimilarityFinder(searcherDubler);
         similarityFinder.calculateJackardSimilarity(set1, set2);
-        Assert.assertThat(set1.length, is(equalTo(searcherDubler.getCallCount())));
+        Assert.assertThat(searcherDubler.getCallCount(), is(equalTo(set1.length)));
     }
 
     class SequenceSearcherDublerForTest implements edu.iis.mto.search.SequenceSearcher {
